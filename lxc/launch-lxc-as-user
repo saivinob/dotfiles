@@ -1,0 +1,2 @@
+lxc exec $container -- su ubuntu -l
+lxc exec $container -- sudo -u ubuntu --login
