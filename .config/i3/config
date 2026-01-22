@@ -8,28 +8,30 @@
 # i3 config file (v4)
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
-# Comments are started with a `#' and can only be used at the beginning of a line
 
 # Include section
 #include ~/.config/i3/autostart.sh
 
-set $mod Mod4
-set $mod2 Mod1
+set $mod Mod1
+# Well we can set more than one 'mod' :)
+set $mod2 Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 #font pango:monospace 8
 
-# Does not have to be monospace, although most geeks would naturally use monospace
-font pango:DejaVu Sans Bold 9
-
-# window title alignment; default is left
-title_align center
+# Does not have to be monospace though!
+#font pango:Sans Bold 9
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
-#font pango:Liberation Mono, DejaVu Sans Mono, Terminus Bold Semi-Condesed 11
+#font pango:Cascadia Code 9
+# A font list is supported. Last one gets the priority!
+font pango:Adwaita Mono 9, JetBrains Mono 9, Fira Code 9, Cascadia Code 9
+
+# Window title alignment; default is left
+title_align center
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -54,12 +56,11 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # Use Mouse+$mod to drag floating windows to their wanted position
-# $mod + left button to move and $mod + right button to resize
 floating_modifier $mod
 
 # set minimum and maximum sizes for floating windows
 # -1 means unconstrained, 0 or undefined means i3 will use a default value
-floating_minimum_size 80 x 30
+floating_minimum_size 80 x 24
 #floating_maximum_size -1 x -1
 floating_maximum_size 1280 x 720
 
@@ -79,30 +80,33 @@ smart_borders on
 
 # for_window directive allows us to execute arbitrary commands for specific
 # windows. for_window <criteria> <command>
-# get criteria for windows using xprop. e.g. for firefox the about dialog 
+# get criteria for windows using xprop. e.g., for firefox the about dialog
 # window will show a property, 'WM_WINDOW_ROLE(STRING) = "About"'. Use as below
 for_window [window_role = "About"] floating enable
-for_window [class="mpv"] floating enable, border pixel 1
-
-# Enable web camera support and make it float and sticky (available on all 
+for_window [title = "Library"] floating enable
+for_window [class = "mpv"] floating enable, border pixel 1
+for_window [class="feh"] floating enable, border pixel 1
+# Enable web camera support and make it float and sticky (available on all
 # workspaces)
-#for_window [title="video0 - mpv"] floating enable
-#for_window [title="video0 - mpv"] sticky enable
+for_window [title="video0 - mpv"] floating enable, sticky enable
+for_window [class="Virt-manager"] floating enable
 
 # assign and for_window both can be used to make window open in a specific
 # workspace. Still need to understand their differences :p
 assign [class="firefox"] 2
-assign [class="mpv"] 4
+assign [class="librewolf"] 9
+assign [class="mpv"] 8
+assign [class="Virt-manager"] 3
 
 # prevent focus changing to new window
 no_focus [window_role="pop-up"]
 
-# Disable focus following mouse eg to accidently changing window when
+# Disable focus following mouse e.g., to accidently changing window when
 # typing on a laptop. Default is yes.
 focus_follows_mouse no
 
 # pop-up during fullscreen mode. smart/ignore/leave_fullscreen
-# smart displays pop-ups belonging to the fullscreen application only 
+# smart displays pop-ups belonging to the fullscreen application only
 popup_during_fullscreen smart
 
 # automatic back-and-forth when switching between workspaces (like in TV remote)
@@ -113,8 +117,8 @@ force_display_urgency_hint 500 ms
 
 # Gaps, now built into i3 since v4.22
 gaps inner 5px
-# with smaart_gaps, no gaps shown when there is only one window open
-smart_gaps on 
+# with smart_gaps, no gaps shown when there is only one window open
+smart_gaps on
 
 # Color scheme for windows
 # dracula theme
@@ -129,25 +133,25 @@ client.background       #F8F8F2
 
 # Commands are what we bind to keypresses. Commands can also be executed at
 # runtime using IPC interface. An easy way to do this is to use i3-msg utility
-# i3-msg border none 
+# i3-msg border none
 # makes current container borderless
 # Commands can be chained using ';' (a semicolon) and/or ',' (a comma) (?!)
 
 # exec and exec_always keywords
-exec --no-startup-id "xterm -e 'neofetch;bash'"
-exec_always ~/.config/i3/autostart.sh
+#exec --no-startup-id "xterm -e 'fastfetch;bash'"
+#exec_always ~/.config/i3/autostart.sh
 
 # start a terminal
-#bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec xterm
+bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Return exec urxvt
 
 # kill focused window
 #bindsym $mod+Shift+q kill
 bindsym $mod+Shift+x kill
 
 # start dmenu (a program launcher)
-#bindsym $mod+d exec --no-startup-id dmenu_run
-bindsym $mod+d exec --no-startup-id "dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10' -p 'dmenu%'"
+#bindsym $mod+m exec --no-startup-id dmenu_run
+bindsym $mod+m exec --no-startup-id "dmenu_run -nf '#F8F8F2' -nb '#282A36' -sb '#6272A4' -sf '#F8F8F2' -fn 'monospace-10' -p 'dmenu%'"
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -248,9 +252,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit \
-	shortcut. Do you really want to exit i3? This will end your X session.'\
-	-B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # exit i3 like dwm or other wm
 bindsym $mod+Ctrl+Shift+q exit
@@ -284,45 +286,42 @@ bindsym $mod+r mode "resize"
 
 # Custom keybindings
 bindsym $mod2+f exec firefox
-bindsym $mod2+t exec thunar
-bindsym $mod2+n exec --no-startup-id "xterm -e 'neofetch;bash'"
-# Had to insert '-name cmus' to get 'instance' working under 'assign'.
-#bindsym $super+m exec urxvt -name cmus -e cmus
-#assign [instance="cmus"] $ws8
-
-#bindsym $super+m exec --no-startup-id "gnome-terminal --role=cmus --command=cmus"
-#assign [class="Gnome-terminal" window_role="cmus"] $ws8
-
+bindsym $mod2+t exec nautilus
+bindsym $mod2+n exec --no-startup-id "xterm -e 'fastfetch;bash'"
+bindsym Print exec --no-startup-id "scrot --file ~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
+bindsym Ctrl+Print exec --no-startup-id "scrot -u --file ~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
+bindsym Shift+Print exec --no-startup-id "scrot -s --file ~/Pictures/Screenshots/Screenshot_%Y%m%d_%H%M%S.png"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	font pango:monospace 9
+        font pango:Cascadia Code 9
         status_command i3status -c ~/.config/i3/i3status.conf
-	# mode dock(default)/hide/invisible
-	#mode hide
-	#hidden_state hide
-	#modifier Mod4
-	#bindsym --release button3 exec --no-startup-id import /tmp/latest-screenshot.png
-	bindsym --release button3 exec --no-startup-id import ~/Pictures/Screenshots/Screenshot_$(date +%Y%m%d%H%M%S).png
-	#default vertical, 1px thick separator separator_symbol "|"
-	separator_symbol "~"
-	# comment out following to enable transparency in i3bar
-	# then use alpha value for colors like #000000ff
-	#i3bar_command i3bar --transparency
-	# dracula theme
-	colors {
-    		background #282A36
-    		statusline #F8F8F2
-    		separator  #44475A
+        # mode dock(default)/hide/invisible
+        #mode hide
+        #hidden_state hide
+        #modifier Mod4
+        #bindsym --release button3 exec --no-startup-id import /tmp/latest-screenshot.png
+        bindsym --release button3 exec --no-startup-id import ~/Pictures/Screenshots/Screenshot_$(date +%Y%m%d%H%M%S).png
+        #default vertical, 1px think separator
+        #separator_symbol "|"
+        separator_symbol "~"
+        # comment out following to enable transparency in i3bar
+        # then use alpha value for colors like #000000ff
+        #i3bar_command i3bar --transparency
+        # dracula theme
+        colors {
+                background #282A36
+                statusline #F8F8F2
+                separator  #44475A
 
-    		focused_workspace  #44475A #44475A #F8F8F2
-    		active_workspace   #282A36 #44475A #F8F8F2
-    		inactive_workspace #282A36 #282A36 #BFBFBF
-    		urgent_workspace   #FF5555 #FF5555 #F8F8F2
-    		binding_mode       #FF5555 #FF5555 #F8F8F2
-  	}
-	# padding similar to css. does not affect the font size
-	padding 2px 0
+                focused_workspace  #44475A #44475A #F8F8F2
+                active_workspace   #282A36 #44475A #F8F8F2
+                inactive_workspace #282A36 #282A36 #BFBFBF
+                urgent_workspace   #FF5555 #FF5555 #F8F8F2
+                binding_mode       #FF5555 #FF5555 #F8F8F2
+        }
+        # padding similar to css. does not affect the font size
+        padding 2px 0px
+        #padding 8px 10px
 }
-

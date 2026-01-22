@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# A NEWBIE script to help avoid typing multiple mount commands for a 
+# chroot session
+#
+# - sv@suivue.net
+#
+
+usage() {
+#        echo 'Arguments passed: "$#", required 2'
+        echo 'Usage:'
+        printf '\t[sudo] newb_chroot <device> <mount_point>\n'
+        printf '\te.g., sudo newb_chroot /dev/sdb2 /mnt/bootstrap\n'
+}
+
+mount_efi() {
+        # select menu does not work in sh; it is a bash/ksh feature
+        PS3="Select an EFI partition: "
+        select efipart in $(fdisk -l | grep 'EFI System' | awk '{print $1}')
+        do
+        	mount $efipart $mp/boot/efi
+        	break
+        done
+}
+
+mount_others() {
+        # bind mount other essential partitions for chroot
+        mount --bind /dev $mp/dev
+        mount --bind /proc $mp/proc
+        mount --bind /sys $mp/sys
+        mount --bind /sys/firmware/efi/efivars $mp/sys/firmware/efi/efivars
+        cat /etc/resolv.conf > $mp/run/systemd/resolve/stub-resolv.conf
+}
+
+switch_root() {
+        chroot $mp \
+        bash -c 'export PS1="\[\033[0;32m\](chroot) \[\033[0m\\]\u@\w# ";\
+        bash --norc'
+}
+
+if [ $# -ne 2 ]; then
+        usage
+        exit
+else
+        fs=$1
+        mp=$2
+        mount $fs $mp
+fi
+
+mount_efi
+mount_others
+switch_root
+
+# Notes (to self):
+#
+# 1. Cool(?) prompts to select device and mount point
+# Following prompts look cool but overtime feel too much...
+# if [ `id -u` != 0 ]; then
+#        echo "You must be root or use sudo with this script"
+#        exit
+# fi
+#
+# printf "Your current disk layout:\n\n"
+# lsblk -o NAME,SIZE,TYPE,MOUNTPOINTS
+# printf "\nEnter a paritition (leave /dev/ part) to mount: "
+# read fs
+# printf "Enter a mount point: "
+# read mp
+#
+# mount /dev/$fs $mp
+#
+# 2. Selecting EFI partition
+# Choose an EFI partition (useful if we have more than one)
+# I found two ways to do it.
+# lsblk way:
+# echo "EFI partition(s) on your system:"
+# lsblk -o NAME,PARTTYPENAME | grep -i EFI
+#
+# fdisk way (better):
+# fdisk -l | grep 'EFI System' | awk '{print $1}'
+# Changing PS1 along with chrooting:
+#
+# 3. Custom PS1 for the chroot
+# Passing variable (PS1) did not work. Exporting it also did not work.
+# Running it after chrooting also did not work. What works is running the
+# code to change prompt after chrooting *and* calling shell without rc.
+# i.e., with `--norc` option.
+# export PS1="\[\033[0;32m\](chroot)\[\033[0m\\]\w\$ "  # does not work
+# export PS1="(chroot) $PS1" chroot $mp  # does not work
+# Following works:
+# chroot $mp \
+#       bash -c 'export PS1="\[\033[0;32m\](chroot) \[\033[0m\\]\u@\w# ";\
+#       bash --norc'
+#

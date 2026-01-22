@@ -1,0 +1,7 @@
+#!/bin/bash
+
+battcap="$(cat /sys/class/power_supply/BAT0/capacity)"
+battstat="$(cat /sys/class/power_supply/BAT0/status)"
+icon=" "
+
+printf "%s %s %s \\n" "$icon" "$battcap%," "$battstat"

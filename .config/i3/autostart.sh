@@ -1,5 +1,5 @@
 #!/bin/sh
-xcompmgr &
+#xcompmgr &
 
 # without running a wallpaper setter, either fehbg or my custom script,
 # wallpaper is not set till the related cron job/systemd-timer is triggered

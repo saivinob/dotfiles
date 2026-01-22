@@ -1,0 +1,33 @@
+set nocompatible
+set number
+set relativenumber
+set nobackup
+set autoindent
+set ruler
+set laststatus=2  " always show the status line
+set incsearch
+set showmatch
+set tabstop=4     " sets tab width to 4 columns; 1 tab = 4 spaces
+set shiftwidth=4  " sets shift width to 4 spaces
+set expandtab     " spaces instead of tabs
+"set smarttab
+"set cursorline
+"set cursorcolumn
+syntax on
+filetype plugin indent on
+
+" Mapleader
+" A mapleader is a key (generally unused by VIM) that is set as a <leader> key.
+" It is a combination key similar to Ctrl, Shift, Alt, Super.
+" The leader key, in combination with another key, will let us create new
+" shortcuts.
+" Default is backslash but to set a custom leader key we do,
+" let mapleader = ","
+
+" Mappings
+" map_mode  <what_you_type>  <what_is_executed>
+" nnoremap - map keys in normal mode
+" inoremap - map keys in insert mode
+" vnoremap - map keys in visual mode
+inoremap jj <esc>
+

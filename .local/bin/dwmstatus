@@ -1,0 +1,6 @@
+#!/bin/bash
+
+while true; do
+	xsetroot -name " $(dwm_net) | $(dwm_power) | $(dwm_clock) "
+	sleep 1m  # or 60 (default in seconds)
+done

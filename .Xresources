@@ -1,78 +1,121 @@
-!!!Xresources configuration
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!  Xresources configuration                                                 !! 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 !!Xft settings
-Xft.dpi: 96
+!!------------
+!!For hdpi screens
+*dpi: 110
+Xft.dpi: 110
+!!For regular screens
+!Xft.dpi: 96
 Xft.antialias: true
 Xft.hinting: true
 Xft.autohint: false
 Xft.hintstyle: hintslight
-Xft.rgba: rgb
+Xft.rgba: none
 Xft.lcdfilter: lcddefault
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!
-!!Fonts (theory :)
-!!
-!!Fonts can be specified in two ways; XLFD and XFT
-!!
-!!X Logical Font Definition (XLFD), used (mostly?) for bitmap fonts has
-!!following format:
-!!-fndry-fmly-wght-slant-sWdth-adstyl-pxlsz-ptSz-resx-resy-spc-avgWdth-rgstry-\
-!!                                                                      encdng
-!! e.g. XTerm*font: -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1
-!!      XTerm*font: -schumacher-clean-medium-r-normal-*-15-*-*-*-*-*-*-*
-!!
-!!X FreeType (XFT), used for ttf/otf fonts rendered by freetype2 has
-!!following format:
-!!      XTerm*faceName: Monospace
-!!      XTerm*faceSize: 10
-!!Or in single line as below
-!!      XTerm*faceName: xft:Monospace:size=10
-!!      XTerm*faceName: Hack:pixelsize=14:antialias=true:hintstyle=hintfull
-!!
-!!Here, 'size' is for size in 'pt' and 'pixelsize' is for size in 'px'
-!!
-!!By default, if both bitmap and truetype fonts are set, truetype is used. 
-!!To start with truetype font disabled (to force use of XLFD font) use below
-!!XTerm*renderFont: false
-!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-!!XTerm settings
-XTerm*faceName: xft:monospace:pixelsize=14
-!!Some fonts do not look good in bold mode
-XTerm*boldFont: false
-XTerm*termName: xterm-256color
-XTerm*title: Terminal (XTerm)
-
-!!Urxvt settings
-urxvt*font: xft:DejaVu Sans Mono:size=10
-!urxvt*font: -misc-fixed-medium-r-normal--15-*-*-*-*-*-*-*
-URxvt*boldFont:
-urxvt.letterSpace: -1
-!!fake transparency
-urxvt.transparent: true
-urxvt.shading: 32
 
 !!Common settings
+!!---------------
 *.scrollBar: false
 *.scrollbarRight: false
 *.saveLines: 4096
 *.geometry: 80x30
 
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!
+!!Fonts theory :)
+!!
+!!Fonts can be specified in two ways: XLFD and XFT
+!!
+!!X Logical Font Definition (XLFD), used (mostly?) for bitmap fonts has
+!!following format:
+!!-fndry-fmly-wght-slant-sWdth-adstyl-pxlsz-ptSz-resx-resy-spc-avgWdth-\
+!!                                                            rgstry-encdng
+!!e.g.,
+!!   XTerm*font: -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1
+!!   XTerm*font: -schumacher-clean-medium-r-normal-*-15-*-*-*-*-*-*-*
+!!
+!!X FreeType (XFT), used for ttf/otf fonts rendered by freetype2 has the
+!!following format:
+!!    XTerm*faceName: Monospace
+!!    XTerm*faceSize: 10
+!!Or in single line as below
+!!    XTerm*faceName: xft:Monospace:size=10
+!!    XTerm*faceName: Hack:pixelsize=14:antialias=true:hintstyle=hintfull
+!!
+!!Here, 'size' is for size in 'pt' and 'pixelsize' is for size in 'px'
+!!
+!!By default, if both bitmap and truetype fonts are set, truetype is used. 
+!!To start with truetype font disabled (to force use of XLFD font) use,
+!!XTerm*renderFont: false
+!!
+!!Some fonts do not look good in bold mode.
+!!Disable bold fonts when using font (XLFD):
+!!XTerm*boldMode: false
+!!Disable bold font when using faceName (Xft):
+!!XTerm*allowBoldFonts: false
+!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!!XTerm settings
+!!--------------
+!!
+!! Note: If any of the Xterm settins do not work, try changing the
+!! capitalization of either 'XTerm' or 'VT100'.
+!! e.g., if `XTerm*termName` does not seem to work try `xterm*termName`.
+!!
+xterm*termName: xterm-256color
+xterm*title: Terminal (XTerm)
+!XTerm*font: -misc-fixed-medium-r-normal--15-140-75-75-c-90-iso10646-1
+!XTerm*faceName: xft:monospace:pixelsize=14
+XTerm*faceName: xft:Cascadia Code:style=Light:size=11
+!XTerm*allowBoldFonts: false
+XTerm*selectToClipboard: true
+
+!!URxvt settings
+!!--------------
+!urxvt*font: -misc-fixed-medium-r-normal--15-*-*-*-*-*-*-*
+!URxvt*font: xft:Monospace:pixelsize=14
+URxvt*font: xft:Cascadia Code:style=Light:size=11
+!!Disable bold fonts in URxvt
+!URxvt*boldFont:
+!URxvt*lineSpacing: 0
+!urxvt.letterSpace: -1
+!!fake transparency
+urxvt.transparent: true
+urxvt.shading: 32
+!Fix for urxvt showing prompt in the vertical middle (in dynamic tiling wm)
+URxvt.geometry: 400x400
+
+
 !!Keyboard combinations like in other 'advanced' terminals.
 !!Source: 
 !!1) Arch wiki
-!!2) http://www.futurile.net/2016/06/14/xterm-setup-and-truetype-font-configuration
-
-XTerm.vt100.translations: #override \n\
+!!2) http://www.futurile.net/2016/06/14/xterm-setup-and-truetype-font-\
+!!                                                                configuration
+*VT100.translations: #override \n\
     Ctrl <Key> plus: larger-vt-font() \n\
     Ctrl <Key> minus: smaller-vt-font() \n\
-    Ctrl <Key> 0: set-vt-font(d)
-    Shift <Keypress> Insert: insert-selection(CLIPBOARD) \n\
-    Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
-    Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
-    Ctrl <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY)
+    Ctrl <Key> 0: set-vt-font(d) \n\
+    Shift <Key> Insert: insert-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key> C: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key> V: insert-selection(CLIPBOARD)
+!!    Ctrl <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY)
+
+! Initially copy-paste was not working with above settings.
+! It seems <Keypress> in
+!       "Shift <Keypress> Insert: insert-selection(CLIPBOARD) \n\"
+! was causing the problem. By chance, I saw the following warning on one
+! of the setup and after changing <Keypress> to <Key> copy-paste works.
+!Warning: translation table syntax error: Unknown event type :   Keypress
+!Warning: ... found while parsing 'Shift <Keypress> Insert: insert-selection(CLIPBOARD) '
+!Warning: String to TranslationTable conversion encountered errors!
 
 !!Colors
 !!Bare minimum
@@ -112,3 +155,4 @@ XTerm.vt100.translations: #override \n\
 ! white
 *.color7: #bfbaac
 *.color15: #fdf6e3
+

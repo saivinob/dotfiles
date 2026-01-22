@@ -1,0 +1,38 @@
+Sharing filesystem in LXC:
+There are two ways to share filesystem (mounting folder(s)).
+1. Mount lxc container's filesystem on host machine and access it as a drive from a file manager.
+  LXC filesystem can be accessed using following command:
+    `sudo lxc file mount <container-name>/path/to/shared-folder /mount-point/on/container`
+
+  However, this mount is accessible only by root (or sudo). The directory entry will be something like,
+    `d?????????	?	?	?	?	? shared-folder
+
+  To create normal-user connection, do any of the following,
+- `lxc file mount <container-name>`
+- `lxc file mount <container-name> --listen <address>:<port>`  # specific address and port
+- `lxc file mount <container-name> --listen 127.0.0.1:0`  # specific address and random port
+
+  Unless `--auth-user` flag is used, it creates a username and password for the session and we can either login using any SFTP client or on terminal using following command.
+    `sshfs <user>@<address>:/path/on/instance /local/filesystem/mount-point -p <port>`
+e.g.,
+    `sshfs xFn8ai8c@127.0.0.1:/home/ubuntu/shared-folder ~/shared-folder -p 45467`
+    
+  In theory, we can also use `--no-auth` option to login without authorization but in my experience it does not work. I keep getting error 'connection reset by peer'. At best, we cau use `--auth-user` to set a known username.
+  
+  However, the connection runs in the foreground and ctrl+c ends the ssh session. So, the password cannot be reused.
+
+2. Mount host container's filesystem inside container.
+  First, create a regular user inside the container. The default user is 'ubuntu' with uid 1000 for Ubuntu images.
+    `lxc exec <container-name> bash`
+  As root, do `adduser <username>` and note down the uid and gid.
+    
+  We can achive this by running following command,
+    `lxc config device add <container-name> shared_dir disk \
+		source="$HOME/shared-folder \
+		path=/home/<username>/shared-folder`
+
+  This should automatically create the destination directory (inside the container). If that is not the case, login to the container (via `lxc exec <container-name> -- sudo -u <username> --login`, create the required directory and then rerun the above command. This will create a read-only share by default. To get read-write access, run the following on the host machine.
+  - update subuid and subgid files.
+    `echo 'root:1000:1' | sudo tee -a /etc/subuid /etc/subgid`
+  - map the local user's uid on host to user's uid on the container.
+    `lxc config set <container-name> raw.idmap "both 1000 1001"`

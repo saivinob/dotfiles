@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Xmodmap
+Comment=Run xmodmap to use user Xmodmap
+Exec=/usr/bin/xmodmap /home/$USER/.Xmodmap
+Icon=application-default-icon
+X-GNOME-Autostart-enabled=true
+Type=Application
